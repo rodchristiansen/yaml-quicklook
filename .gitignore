@@ -1,0 +1,32 @@
+# Build artifacts
+build/
+DerivedData/
+
+# Xcode user-specific data
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad
+*.xcscmblueprint
+*.xccheckout
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Generated binaries & symbols
+*.app
+*.dSYM
+*.ipa
+*.framework
+
+# Swift Package Manager working data
+.swiftpm/
+.build/
+
+# macOS filesystem metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+*.swp
