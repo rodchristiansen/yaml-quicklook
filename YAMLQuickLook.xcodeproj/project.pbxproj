@@ -15,9 +15,7 @@
 		B8A1B5012B5D3F3A00123456 /* PreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A1B5002B5D3F3A00123456 /* PreviewProvider.swift */; };
 		B8A1B5072B5D3F3A00123456 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = B8A1B5062B5D3F3A00123456 /* Yams */; };
 		B8A1B50A2B5D3F3A00123456 /* YamlQuickLookExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B8A1B4FE2B5D3F3A00123456 /* YamlQuickLookExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		B8A1B5202B5D3F3C00123456 /* YAMLPreviewRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A1B52A2B5D3F3C00123456 /* YAMLPreviewRenderer.swift */; };
 		B8A1B5212B5D3F3C00123456 /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A1B5292B5D3F3C00123456 /* ThumbnailProvider.swift */; };
-		B8A1B5222B5D3F3C00123456 /* YAMLPreviewRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A1B52A2B5D3F3C00123456 /* YAMLPreviewRenderer.swift */; };
 		B8A1B5232B5D3F3C00123456 /* YamlQuickLookThumbnailExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B8A1B5282B5D3F3C00123456 /* YamlQuickLookThumbnailExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B8A1B5242B5D3F3C00123456 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = B8A1B5312B5D3F3C00123456 /* Yams */; };
 /* End PBXBuildFile section */
@@ -69,7 +67,6 @@
 		B8A1B5102B5D3F3B00123456 /* YamlQuickLookExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = YamlQuickLookExtension.entitlements; sourceTree = "<group>"; };
 		B8A1B5282B5D3F3C00123456 /* YamlQuickLookThumbnailExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = YamlQuickLookThumbnailExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8A1B5292B5D3F3C00123456 /* ThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailProvider.swift; sourceTree = "<group>"; };
-		B8A1B52A2B5D3F3C00123456 /* YAMLPreviewRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YAMLPreviewRenderer.swift; sourceTree = "<group>"; };
 		B8A1B52B2B5D3F3C00123456 /* YamlQuickLookThumbnailExtension-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "YamlQuickLookThumbnailExtension-Info.plist"; sourceTree = "<group>"; };
 		B8A1B52C2B5D3F3C00123456 /* YamlQuickLookThumbnailExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = YamlQuickLookThumbnailExtension.entitlements; sourceTree = "<group>"; };
 		DC93BB3A2E935EB50052A5B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -150,7 +147,6 @@
 		B8A1B4FF2B5D3F3A00123456 /* YamlQuickLookExtension */ = {
 			isa = PBXGroup;
 			children = (
-				B8A1B52A2B5D3F3C00123456 /* YAMLPreviewRenderer.swift */,
 				B8A1B5002B5D3F3A00123456 /* PreviewProvider.swift */,
 				B8A1B50C2B5D3F3A00123456 /* YamlQuickLookExtension-Info.plist */,
 				B8A1B5102B5D3F3B00123456 /* YamlQuickLookExtension.entitlements */,
@@ -316,7 +312,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B8A1B5202B5D3F3C00123456 /* YAMLPreviewRenderer.swift in Sources */,
 				B8A1B5012B5D3F3A00123456 /* PreviewProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -326,7 +321,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B8A1B5212B5D3F3C00123456 /* ThumbnailProvider.swift in Sources */,
-				B8A1B5222B5D3F3C00123456 /* YAMLPreviewRenderer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

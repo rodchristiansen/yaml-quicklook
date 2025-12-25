@@ -4,33 +4,30 @@ import QuickLookThumbnailing
 
 final class ThumbnailProvider: QLThumbnailProvider {
     private let logger = Logger(subsystem: "com.yamlquicklook.YamlQuickLook", category: "thumbnail")
-    private let renderer = YAMLPreviewRenderer.shared
 
     override func provideThumbnail(for request: QLFileThumbnailRequest, _ handler: @escaping (QLThumbnailReply?, Error?) -> Void) {
-        logger.debug("Generating thumbnail for \(request.fileURL.path, privacy: .public)")
-
         do {
-            let output = try renderer.render(for: request.fileURL)
-            let reply = makeThumbnailReply(for: request, output: output)
+            let content = try String(contentsOf: request.fileURL, encoding: .utf8)
+            let reply = makeThumbnailReply(for: request, content: content)
             handler(reply, nil)
         } catch {
-            logger.error("Failed thumbnail render: \(error.localizedDescription, privacy: .public)")
+            logger.error("Failed to read file for thumbnail: \(error.localizedDescription, privacy: .public)")
             handler(nil, error)
         }
     }
 
-    private func makeThumbnailReply(for request: QLFileThumbnailRequest, output: YAMLPreviewRenderOutput) -> QLThumbnailReply {
+    private func makeThumbnailReply(for request: QLFileThumbnailRequest, content: String) -> QLThumbnailReply {
         let baseSize = max(request.maximumSize.width, request.maximumSize.height)
         let contextSize = CGSize(width: baseSize, height: baseSize)
 
         return QLThumbnailReply(contextSize: contextSize, currentContextDrawing: { [weak self] () -> Bool in
             guard let self, let context = NSGraphicsContext.current?.cgContext else { return false }
-            self.drawThumbnail(in: context, size: contextSize, scale: request.scale, output: output)
+            self.drawThumbnail(in: context, size: contextSize, scale: request.scale, content: content)
             return true
         })
     }
 
-    private func drawThumbnail(in context: CGContext, size: CGSize, scale: CGFloat, output: YAMLPreviewRenderOutput) {
+    private func drawThumbnail(in context: CGContext, size: CGSize, scale: CGFloat, content: String) {
         context.saveGState()
         defer { context.restoreGState() }
 
@@ -45,7 +42,7 @@ final class ThumbnailProvider: QLThumbnailProvider {
         NSGraphicsContext.saveGraphicsState()
         defer { NSGraphicsContext.restoreGraphicsState() }
 
-        drawPlainPreview(in: canvasRect.insetBy(dx: 10, dy: 10), content: output.previewContent)
+        drawPlainPreview(in: canvasRect.insetBy(dx: 10, dy: 10), content: content)
     }
 
     private func drawPlainPreview(in rect: CGRect, content: String) {
@@ -75,6 +72,6 @@ final class ThumbnailProvider: QLThumbnailProvider {
         }
 
         let prefix = lines.prefix(maxLines).joined(separator: "\n")
-        return prefix + "\n…"
+        return prefix + "\n..."
     }
 }

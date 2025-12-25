@@ -1,21 +1,14 @@
-# YamlQuickLook
+# YAML Quick Look
 
-YamlQuickLook is a macOS Quick Look extension for YAML files that provides syntax highlighting, validation, and a refined preview interface.
+A native macOS Quick Look extension for previewing YAML files. Provides the same clean, scrollable plain-text preview experience as built-in file types like `.txt` and `.plist`.
 
 ## Features
 
-- **Syntax Highlighting**: Color-coded YAML rendered with consistent typography
-- **YAML Validation**: Detects and displays parsing errors with contextual messages
-- **Dark Mode Support**: Automatically adapts to the system appearance
-- **Structure Analysis**: Summarizes key statistics, depth, and hierarchy
-- **Modern Design**: Provides a clean, readable layout aligned with macOS guidelines
-- **Fast Performance**: Parses and renders YAML content with minimal latency
-
-## Supported File Types
-
-- `.yaml` files
-- `.yml` files
-- Files with YAML MIME types (`application/x-yaml`, `text/yaml`, `text/x-yaml`)
+- Native plain-text Quick Look preview for YAML files
+- Scrollable content view for large files
+- Thumbnail generation for Finder icons
+- Dark mode support
+- Supports `.yaml` and `.yml` file extensions
 
 ## Requirements
 
@@ -24,79 +17,183 @@ YamlQuickLook is a macOS Quick Look extension for YAML files that provides synta
 
 ## Installation
 
-### Option 1: Build from Source
+### Option 1: Download Release
 
-1. **Clone the repository**:
-   ```bash
-   git clone <repository-url>
-   cd yamlQuickLook
-   ```
+1. Download the latest `YAMLQuickLook.zip` from [Releases](https://github.com/rodchristiansen/yaml-quicklook/releases)
+2. Unzip and move `YamlQuickLook.app` to `/Applications`
+3. Open the app once to register the extension
+4. Go to System Settings > Privacy and Security > Extensions > Quick Look
+5. Enable "YAML Quick Look"
 
-2. **Open in Xcode**:
-   ```bash
-   open YAMLQuickLook.xcodeproj
-   ```
+Note: The release build is not notarized. On first launch, you may need to:
+- Right-click the app and select "Open", or
+- Run: `xattr -cr /Applications/YamlQuickLook.app`
 
-3. **Build the project**:
-   - Select the `YamlQuickLook` scheme
-   - Build and run the project (⌘+R)
-   - The app will build and install the Quick Look extension
+### Option 2: Build from Source
 
-4. **Enable the extension**:
-   - Go to **System Preferences** > **Privacy & Security** > **Extensions** > **Quick Look**
-   - Enable "YAML Quick Look"
-
-### Option 2: Manual Installation
-
-1. Build the project as described above
-2. Copy the built app to your Applications folder
-3. Run the app once to register the extension
-4. Enable the extension in System Preferences
+See [Building from Source](#building-from-source) below.
 
 ## Usage
 
-1. Navigate to any YAML file in Finder
-2. Select the file and press **Space** for Quick Look preview
-3. Or right-click the file and select **Quick Look**
+1. Select any `.yaml` or `.yml` file in Finder
+2. Press Space to preview with Quick Look
+3. Or view in Finder's preview pane (right sidebar)
 
-The extension displays:
-- Syntax-highlighted YAML content
-- File statistics such as key counts and nesting depth
-- Validation status for valid and invalid YAML documents
-- Error messages with source context when parsing fails
-- Parsed structure representation
+## Building from Source
 
-## Development
+### Prerequisites
 
-### Project Structure
+- macOS 14.0 or later
+- Xcode 15.0 or later
+- An Apple Developer account (for signing and notarization)
 
-```
-YamlQuickLook/
-├── YamlQuickLook/              # Main application
-│   ├── AppDelegate.swift       # App entry point
-│   ├── ContentView.swift       # Main app UI
-│   ├── Main.storyboard         # Interface builder file
-│   └── Assets.xcassets         # App assets
-├── YamlQuickLookExtension/     # Quick Look extension
-│   ├── PreviewProvider.swift   # Main extension logic
-│   ├── YAMLParser.swift        # YAML parsing utilities
-│   └── HTMLGenerator.swift     # HTML generation for preview
-└── YAMLQuickLook.xcodeproj     # Xcode project file
+### Basic Build
+
+```bash
+git clone https://github.com/rodchristiansen/yaml-quicklook.git
+cd yaml-quicklook
+xcodebuild -scheme YamlQuickLook -configuration Release build
 ```
 
-### Key Components
+### Install Locally
 
-- **PreviewProvider**: Main Quick Look extension class that handles preview generation
-- **YAMLParser**: Handles YAML parsing using the Yams library, provides validation and structure analysis
-- **HTMLGenerator**: Creates modern, responsive HTML previews with syntax highlighting
+```bash
+# Build
+xcodebuild -scheme YamlQuickLook -configuration Release \
+  -derivedDataPath build clean build
 
-### Dependencies
+# Install
+cp -R build/Build/Products/Release/YamlQuickLook.app /Applications/
 
-- **Yams**: Swift YAML parser library for parsing and validating YAML content
+# Register extension
+pluginkit -a /Applications/YamlQuickLook.app/Contents/PlugIns/YamlQuickLookExtension.appex
 
-### Building
+# Reset Quick Look
+qlmanage -r && qlmanage -r cache
+```
 
-The project uses Swift Package Manager for dependency management. Yams will be automatically downloaded and built when you build the project.
+### Signing with Your Developer ID
+
+To distribute the app outside the Mac App Store, you need to sign and notarize it.
+
+#### 1. Configure Signing in Xcode
+
+Open `YAMLQuickLook.xcodeproj` in Xcode and configure signing for all three targets:
+
+- **YamlQuickLook** (main app)
+- **YamlQuickLookExtension** (Quick Look preview)
+- **YamlQuickLookThumbnailExtension** (thumbnail generator)
+
+For each target:
+1. Select the target in the project navigator
+2. Go to "Signing and Capabilities"
+3. Select your Team
+4. Choose "Developer ID Application" for distribution outside the App Store
+
+#### 2. Build Signed Release
+
+```bash
+xcodebuild -scheme YamlQuickLook \
+  -configuration Release \
+  -derivedDataPath build \
+  CODE_SIGN_IDENTITY="Developer ID Application: Your Name (TEAM_ID)" \
+  DEVELOPMENT_TEAM="TEAM_ID" \
+  clean build
+```
+
+#### 3. Notarize the App
+
+```bash
+# Create a ZIP for notarization
+cd build/Build/Products/Release
+zip -r YamlQuickLook.zip YamlQuickLook.app
+
+# Submit for notarization
+xcrun notarytool submit YamlQuickLook.zip \
+  --apple-id "your@email.com" \
+  --team-id "TEAM_ID" \
+  --password "app-specific-password" \
+  --wait
+
+# Staple the notarization ticket
+xcrun stapler staple YamlQuickLook.app
+```
+
+#### 4. Create Distribution ZIP
+
+```bash
+# Re-zip with stapled ticket
+VERSION=$(date -u +"%Y.%m.%d.%H%M")
+zip -r YAMLQuickLook-${VERSION}.zip YamlQuickLook.app
+```
+
+### App Store Distribution
+
+For Mac App Store distribution:
+
+1. Change signing to "Apple Distribution" certificate
+2. Enable App Sandbox in all targets' entitlements
+3. Archive in Xcode: Product > Archive
+4. Distribute via App Store Connect
+
+Required entitlements for App Store:
+
+```xml
+<key>com.apple.security.app-sandbox</key>
+<true/>
+<key>com.apple.security.files.user-selected.read-only</key>
+<true/>
+```
+
+## Project Structure
+
+```
+yaml-quicklook/
+├── YamlQuickLook/                    # Main application (container)
+│   ├── AppDelegate.swift
+│   ├── ContentView.swift
+│   └── Assets.xcassets/
+├── YamlQuickLookExtension/           # Quick Look preview extension
+│   ├── PreviewProvider.swift
+│   └── YamlQuickLookExtension.entitlements
+├── YamlQuickLookThumbnailExtension/  # Thumbnail extension
+│   ├── ThumbnailProvider.swift
+│   └── YamlQuickLookThumbnailExtension.entitlements
+├── YAMLQuickLook.xcodeproj/
+├── .github/workflows/
+│   └── release.yml
+├── LICENSE
+└── README.md
+```
+
+## Troubleshooting
+
+### Extension not working
+
+1. Ensure the app is in `/Applications`
+2. Check System Settings > Privacy and Security > Extensions > Quick Look
+3. Reset Quick Look: `qlmanage -r && qlmanage -r cache`
+4. Restart Finder: `killall Finder`
+
+### "App is damaged" error
+
+Run: `xattr -cr /Applications/YamlQuickLook.app`
+
+### Preview not updating after rebuild
+
+```bash
+pluginkit -a /Applications/YamlQuickLook.app/Contents/PlugIns/YamlQuickLookExtension.appex
+qlmanage -r && qlmanage -r cache
+killall Finder
+```
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## Contributing
+
+Contributions are welcome. Please open an issue or submit a pull request.
 
 To build from command line:
 ```bash

@@ -13,7 +13,7 @@ xcuserdata/
 *.mode2v3
 *.perspectivev3
 
-# Generated binaries & symbols
+# Generated binaries and symbols
 *.app
 *.dSYM
 *.ipa

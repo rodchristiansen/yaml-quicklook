@@ -1,0 +1,68 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Select Xcode
+      run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+
+    - name: Build application
+      run: |
+        xcodebuild -scheme YamlQuickLook \
+          -configuration Release \
+          -derivedDataPath build \
+          CODE_SIGN_IDENTITY="-" \
+          CODE_SIGNING_REQUIRED=NO \
+          clean build
+
+    - name: Create release artifact
+      run: |
+        cd build/Build/Products/Release
+        zip -r YAMLQuickLook.zip YamlQuickLook.app
+        mv YAMLQuickLook.zip $GITHUB_WORKSPACE/
+
+    - name: Generate version from timestamp
+      id: version
+      run: |
+        VERSION=$(date -u +"%Y.%m.%d.%H%M")
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Generated version: $VERSION"
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        name: YAML Quick Look ${{ steps.version.outputs.version }}
+        body: |
+          ## YAML Quick Look ${{ steps.version.outputs.version }}
+          
+          A native macOS Quick Look extension for YAML files.
+          
+          ### Installation
+          1. Download `YAMLQuickLook.zip`
+          2. Unzip and move `YamlQuickLook.app` to `/Applications`
+          3. Open the app once to register the extension
+          4. Enable the extension in System Settings > Privacy & Security > Extensions > Quick Look
+          
+          ### Note
+          This release is not notarized. You may need to right-click and select "Open" the first time, 
+          or remove the quarantine attribute:
+          ```bash
+          xattr -cr /Applications/YamlQuickLook.app
+          ```
+        files: YAMLQuickLook.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
