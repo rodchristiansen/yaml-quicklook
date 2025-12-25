@@ -32,13 +32,13 @@ jobs:
     - name: Create release artifact
       run: |
         cd build/Build/Products/Release
-        zip -r YAMLQuickLook.zip YamlQuickLook.app
-        mv YAMLQuickLook.zip $GITHUB_WORKSPACE/
+        zip -r yamlQuickLook.zip YamlQuickLook.app
+        mv yamlQuickLook.zip $GITHUB_WORKSPACE/
 
     - name: Generate version from timestamp
       id: version
       run: |
-        VERSION=$(date -u +"%Y.%m.%d.%H%M")
+        VERSION=$(date -u +"%Y.%m.%d")
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "Generated version: $VERSION"
 
@@ -46,25 +46,30 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ steps.version.outputs.version }}
-        name: YAML Quick Look ${{ steps.version.outputs.version }}
+        name: YAML Quick Look
         body: |
-          ## YAML Quick Look ${{ steps.version.outputs.version }}
-          
           A native macOS Quick Look extension for YAML files.
           
           ### Installation
-          1. Download `YAMLQuickLook.zip`
+          1. Download `yamlQuickLook.zip`
           2. Unzip and move `YamlQuickLook.app` to `/Applications`
           3. Open the app once to register the extension
           4. Enable the extension in System Settings > Privacy & Security > Extensions > Quick Look
           
-          ### Note
-          This release is not notarized. You may need to right-click and select "Open" the first time, 
-          or remove the quarantine attribute:
+          ### Important Note
+          This release is **not code-signed or notarized**. macOS Sequoia and later make it difficult to open unsigned apps.
+          
+          You **must** remove the quarantine attribute after installation:
           ```bash
           xattr -cr /Applications/YamlQuickLook.app
           ```
-        files: YAMLQuickLook.zip
+          
+          Then restart Finder and QuickLook:
+          ```bash
+          killall Finder
+          qlmanage -r && qlmanage -r cache
+          ```
+        files: yamlQuickLook.zip
         draft: false
         prerelease: false
       env:

@@ -19,15 +19,22 @@ A native macOS Quick Look extension for previewing YAML files. Provides the same
 
 ### Option 1: Download Release
 
-1. Download the latest `YAMLQuickLook.zip` from [Releases](https://github.com/rodchristiansen/yaml-quicklook/releases)
+1. Download the latest `yamlQuickLook.zip` from [Releases](https://github.com/rodchristiansen/yaml-quicklook/releases)
 2. Unzip and move `YamlQuickLook.app` to `/Applications`
-3. Open the app once to register the extension
-4. Go to System Settings > Privacy and Security > Extensions > Quick Look
-5. Enable "YAML Quick Look"
+3. Remove the quarantine attribute (required for unsigned apps):
+   ```bash
+   xattr -cr /Applications/YamlQuickLook.app
+   ```
+4. Open the app once to register the extension
+5. Go to System Settings > Privacy and Security > Extensions > Quick Look
+6. Enable "YAML Quick Look"
+7. Restart Finder and Quick Look:
+   ```bash
+   killall Finder
+   qlmanage -r && qlmanage -r cache
+   ```
 
-Note: The release build is not notarized. On first launch, you may need to:
-- Right-click the app and select "Open", or
-- Run: `xattr -cr /Applications/YamlQuickLook.app`
+**Important:** This app is not code-signed or notarized. macOS Sequoia and later require the `xattr` command above to run unsigned apps.
 
 ### Option 2: Build from Source
 
@@ -106,10 +113,10 @@ xcodebuild -scheme YamlQuickLook \
 ```bash
 # Create a ZIP for notarization
 cd build/Build/Products/Release
-zip -r YamlQuickLook.zip YamlQuickLook.app
+zip -r yamlQuickLook.zip YamlQuickLook.app
 
 # Submit for notarization
-xcrun notarytool submit YamlQuickLook.zip \
+xcrun notarytool submit yamlQuickLook.zip \
   --apple-id "your@email.com" \
   --team-id "TEAM_ID" \
   --password "app-specific-password" \
@@ -123,26 +130,8 @@ xcrun stapler staple YamlQuickLook.app
 
 ```bash
 # Re-zip with stapled ticket
-VERSION=$(date -u +"%Y.%m.%d.%H%M")
-zip -r YAMLQuickLook-${VERSION}.zip YamlQuickLook.app
-```
-
-### App Store Distribution
-
-For Mac App Store distribution:
-
-1. Change signing to "Apple Distribution" certificate
-2. Enable App Sandbox in all targets' entitlements
-3. Archive in Xcode: Product > Archive
-4. Distribute via App Store Connect
-
-Required entitlements for App Store:
-
-```xml
-<key>com.apple.security.app-sandbox</key>
-<true/>
-<key>com.apple.security.files.user-selected.read-only</key>
-<true/>
+VERSION=$(date -u +"%Y.%m.%d")
+zip -r yamlQuickLook-${VERSION}.zip YamlQuickLook.app
 ```
 
 ## Project Structure
