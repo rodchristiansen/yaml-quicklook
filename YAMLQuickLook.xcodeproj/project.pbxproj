@@ -12,6 +12,7 @@
 		B8A1B4ED2B5D3F2B00123456 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B8A1B4EC2B5D3F2B00123456 /* Assets.xcassets */; };
 		B8A1B4F02B5D3F2B00123456 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B8A1B4EF2B5D3F2B00123456 /* Preview Assets.xcassets */; };
 		B8A1B4F22B5D3F2B00123456 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B8A1B4F12B5D3F2B00123456 /* Main.storyboard */; };
+		DC93BB3D2E935EC10052A5B4 /* yamlQuickLook.icon in Resources */ = {isa = PBXBuildFile; fileRef = DC93BB3C2E935EC00052A5B3 /* yamlQuickLook.icon */; };
 		B8A1B5012B5D3F3A00123456 /* PreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A1B5002B5D3F3A00123456 /* PreviewProvider.swift */; };
 		B8A1B5072B5D3F3A00123456 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = B8A1B5062B5D3F3A00123456 /* Yams */; };
 		B8A1B50A2B5D3F3A00123456 /* YamlQuickLookExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B8A1B4FE2B5D3F3A00123456 /* YamlQuickLookExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -71,6 +72,7 @@
 		B8A1B52C2B5D3F3C00123456 /* YamlQuickLookThumbnailExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = YamlQuickLookThumbnailExtension.entitlements; sourceTree = "<group>"; };
 		DC93BB3A2E935EB50052A5B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC93BB3B2E935EB90052A5B2 /* Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Extension.entitlements; sourceTree = "<group>"; };
+		DC93BB3C2E935EC00052A5B3 /* yamlQuickLook.icon */ = {isa = PBXFileReference; lastKnownFileType = file; path = yamlQuickLook.icon; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				B8A1B4E82B5D3F2A00123456 /* AppDelegate.swift */,
 				B8A1B4EA2B5D3F2A00123456 /* ContentView.swift */,
 				B8A1B4F12B5D3F2B00123456 /* Main.storyboard */,
+				DC93BB3C2E935EC00052A5B3 /* yamlQuickLook.icon */,
 				B8A1B4EC2B5D3F2B00123456 /* Assets.xcassets */,
 				B8A1B4F32B5D3F2B00123456 /* YamlQuickLook-Info.plist */,
 				B8A1B4F42B5D3F2B00123456 /* YamlQuickLook.entitlements */,
@@ -171,6 +174,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B8A1B4F52B5D3F2B00123456 /* Build configuration list for PBXNativeTarget "YamlQuickLook" */;
 			buildPhases = (
+				DC93BB3E2E935ED00052A5B5 /* Update Version */,
 				B8A1B4E12B5D3F2A00123456 /* Sources */,
 				B8A1B4E22B5D3F2A00123456 /* Frameworks */,
 				B8A1B4E32B5D3F2A00123456 /* Resources */,
@@ -278,6 +282,7 @@
 			files = (
 				B8A1B4F02B5D3F2B00123456 /* Preview Assets.xcassets in Resources */,
 				B8A1B4ED2B5D3F2B00123456 /* Assets.xcassets in Resources */,
+				DC93BB3D2E935EC10052A5B4 /* yamlQuickLook.icon in Resources */,
 				B8A1B4F22B5D3F2B00123456 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -325,6 +330,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DC93BB3E2E935ED00052A5B5 /* Update Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Update Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Update version to YYYY.MM.DD format at build time\nVERSION=$(date +%Y.%m.%d)\n\necho \"Setting version to: $VERSION\"\n\n# Use xcrun agvtool to update the marketing version\ncd \"${PROJECT_DIR}\"\nxcrun agvtool new-marketing-version \"$VERSION\"\n\necho \"Version updated to $VERSION\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		B8A1B5092B5D3F3A00123456 /* PBXTargetDependency */ = {
@@ -463,7 +489,7 @@
 		B8A1B4F82B5D3F2B00123456 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = yamlQuickLook;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = YamlQuickLook/YamlQuickLook.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -485,8 +511,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yamlquicklook.YamlQuickLook;
+				MARKETING_VERSION = 2025.12.25;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.rodchristiansen.YamlQuickLook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -496,7 +522,7 @@
 		B8A1B4F92B5D3F2B00123456 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = yamlQuickLook;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = YamlQuickLook/YamlQuickLook.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -518,8 +544,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yamlquicklook.YamlQuickLook;
+				MARKETING_VERSION = 2025.12.25;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.rodchristiansen.YamlQuickLook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -542,8 +568,8 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yamlquicklook.YamlQuickLook.YamlQuickLookExtension;
+				MARKETING_VERSION = 2025.12.25;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.rodchristiansen.YamlQuickLook.YamlQuickLookExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -567,8 +593,8 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yamlquicklook.YamlQuickLook.YamlQuickLookExtension;
+				MARKETING_VERSION = 2025.12.25;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.rodchristiansen.YamlQuickLook.YamlQuickLookExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -592,8 +618,8 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yamlquicklook.YamlQuickLook.YamlQuickLookThumbnailExtension;
+				MARKETING_VERSION = 2025.12.25;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.rodchristiansen.YamlQuickLook.YamlQuickLookThumbnailExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -617,8 +643,8 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yamlquicklook.YamlQuickLook.YamlQuickLookThumbnailExtension;
+				MARKETING_VERSION = 2025.12.25;
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.rodchristiansen.YamlQuickLook.YamlQuickLookThumbnailExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
